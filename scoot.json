@@ -1,0 +1,16 @@
+{
+  "achange": [ "Text 1","Text 2" ],
+  "tone": "{achange} ",
+  "tdua": "{tanggal} {jam} {menit} {bulan}",
+  "tgia": "MxT Store Trusted",
+  "tfour": "Trusted",
+  "type": "PLAYING",
+  "autoRsd": "Halo, Kenapa Tag Saya?\n- Auto Respond",
+  "largeImg": "mp:attachments/1042215433174003762/1043167476046893066/20221029_171840.png",
+  "smallImg": "mp:attachments/1042215433174003762/1043167476046893066/20221029_171840.png",
+  "bone": "MxT Store",
+  "bdua": "Button 2",
+  "linkbone": "https://youtube.com/channel/UCFmKhZEfWcLWwq0K0cYll2Q",
+  "linkbdua": "https://discord.gg/64kEQMhu4a", 
+  "ID": "1213706975767166976" 
+}
