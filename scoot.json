@@ -10,19 +10,5 @@
   "labeldua": "Button 2",
   "linkone": "https://youtube.com/channel/UCFmKhZEfWcLWwq0K0cYll2Q",
   "linkdua": "https://discord.gg/64kEQMhu4a",
-  "ganti": ["Ganti 1", "Ganti 2"],
-  "discord": {
-    "messageCreate": {
-      "attachment": {
-        "path": "path/to/1.jpg",
-        "filename": "1.jpg"
-      },
-      "embed": {
-        "title": "Product Information",
-        "description": "This is a description of the product.",
-        "image": "attachment://1.jpg",
-        "color": "#0099ff"
-      }
-    }
-  }
+  "ganti": ["Ganti 1", "Ganti 2"]
 }
