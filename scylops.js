@@ -124,23 +124,57 @@ function updatePresence() {
   bot.user.setActivity(pr.toJSON());
 }
 
-// Update presence data every 30 seconds (optional)
-setInterval(() => {
-  updatePresence();
-}, 30 * 1000);
-
 bot.on('ready', async () => {
   console.log(`${bot.user.tag}`);
-  updatePresence();
+  setInterval(() => {
+    function getOrdinalNum(n) {
+      return n + (n > 0 ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10] : '');
+    }
+
+    const date = new Date();
+    let tanggal = getOrdinalNum(date.getDate());
+    let jam = date.getHours();
+    let menit = date.getMinutes();
+    let bulan = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ][date.getMonth()];
+
+    if (jam < 10) jam = `0${jam}`;
+    if (menit < 10) menit = `0${menit}`;
+
+    const presenceData = {
+      name: config.scy.name.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
+      details: config.scy.details.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
+      state: config.scy.state.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
+      type: config.scy.type,
+      largeImage: config.scy.largeImage,
+      smallImage: config.scy.smallImage,
+      largeText: config.scy.largeText,
+      smallText: config.scy.smallText,
+      buttons: config.scy.buttons
+    };
+
+    updatePresenceData(presenceData);
+  }, 30 * 1000);
 });
 
 bot.on('messageCreate', async (msg) => {
   if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) {
-    if (!config.autoRespond.enabled) return; // Check if the auto respond feature is enabled
+    if (!config.autoRespond.enabled) return;
     const user = msg.author;
     const userId = user.id;
     const currentTime = Date.now();
-    // Check if the user has already received a response within the cooldown period
     if (responseTimestamps.has(userId) && responseTimestamps.get(userId) + config.autoRespond.cooldown > currentTime) {
       return;
     }
