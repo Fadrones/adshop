@@ -10,5 +10,8 @@
   "labeldua": "Button 2",
   "linkone": "https://youtube.com/channel/UCFmKhZEfWcLWwq0K0cYll2Q",
   "linkdua": "https://discord.gg/64kEQMhu4a",
-  "ganti": ["Ganti 1", "Ganti 2"]
+  "ganti": ["Ganti 1", "Ganti 2"],
+  "presence": {
+    "status": "dnd"
+    } 
 }
