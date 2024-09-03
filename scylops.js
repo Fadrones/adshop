@@ -1,4 +1,4 @@
-const { Client, RichPresence } = require('discord.js-selfbot-v13');
+const { Client, MessageAttachment, RichPresence, MessageEmbed } = require('discord.js-selfbot-v13');
 
 const bot = new Client({
   checkUpdate: false
@@ -9,17 +9,24 @@ const config = {
     name: 'Custom Presence', // Text Top
     details: '{tanggal} {jam} {menit} {bulan}', // Text Middle
     state: 'Taixit.ID', // Text Bottom
-    type: '0', // 0 : PLAYING, 1 : STREAMING, 2 : LISTENING, 3 : WATCHING ( bisa nomer / text )
-    largeImage: 'mp:attachments/1042215433174003762/1043167476046893066/20221029_171840.png', // GIF / IMG VIA LINK
-    smallImage: 'mp:attachments/1042215433174003762/1043167476046893066/20221029_171840.png',// GIF / IMG VIA LINK
+    type: '0', // 0 : PLAYING, 1 : STREAMING, 2 : LISTENING, 3 : WATCHING (bisa nomer / text)
+    largeImage: 'mp:', // GIF / IMG VIA LINK
+    smallImage: 'mp:',// GIF / IMG VIA LINK
     largeText: 'MxT Store Trusted', // Text Di Gambar besar
-    smallText: 'DC - ${bot.user.tag}', // text Di Gambar kecil
+    smallText: '', // text Di Gambar kecil
     buttons: [
       { label: 'MxT Store', url: 'https://youtube.com/channel/UCFmKhZEfWcLwq0K0cYll2Q' }, // button 1
       { label: 'Button 2', url: 'https://discord.gg/64kEQMhu4a' } // button 2
     ]
+  },
+  autoRespond: {
+    enabled: true, // enable or disable the auto respond
+    cooldown: 60 * 60 * 1000, // 1 hour
+    response: 'Hello, {username}!', // Text Auto Respond
   }
 };
+
+const responseTimestamps = new Map();
 
 // Validate config object
 if (!config.scy || !config.scy.name || !config.scy.details || !config.scy.state || !config.scy.type) {
@@ -45,11 +52,10 @@ let presenceData = {
 
 // Function to update presence data
 function updatePresenceData(newData) {
-  if (!newData || typeof newData !== 'object') {
+  if (!newData || typeof newData !== 'object' || Object.keys(newData).length === 0) {
     throw new Error('Invalid new data');
   }
 
-  // Validate properties of new data
   if (newData.name && typeof newData.name !== 'string') {
     throw new Error('Invalid name value in new data');
   }
@@ -123,13 +129,34 @@ setInterval(() => {
   updatePresence();
 }, 30 * 1000);
 
-// Event listener for ready event
 bot.on('ready', async () => {
   console.log(`${bot.user.tag}`);
   updatePresence();
 });
 
-// Example usage: Update presence data dynamically
-// updatePresenceData({ name: 'New Name', details: 'New Details' });
+bot.on('messageCreate', async (msg) => {
+  if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) {
+    if (!config.autoRespond.enabled) return; // Check if the auto respond feature is enabled
+    const user = msg.author;
+    const userId = user.id;
+    const currentTime = Date.now();
+    // Check if the user has already received a response within the cooldown period
+    if (responseTimestamps.has(userId) && responseTimestamps.get(userId) + config.autoRespond.cooldown > currentTime) {
+      return;
+    }
+    const response = config.autoRespond.response.replace('{username}', user.username);
+    msg.reply({ content: response });
+    responseTimestamps.set(userId, currentTime);
+  }
+});
+
+setInterval(() => {
+  const currentTime = Date.now();
+  responseTimestamps.forEach((timestamp, userId) => {
+    if (timestamp + config.autoRespond.cooldown < currentTime) {
+      responseTimestamps.delete(userId);
+    }
+  });
+}, config.autoRespond.cooldown);
 
 bot.login(process.env.TOKEN);
