@@ -63,20 +63,7 @@ rpc.on('ready', async () => {
     let months = date.getMonth()
     let dy = date.getDate()
     let year = date.getFullYear()
-    let monthst = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "Desember"
-    ]
+    let months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
     let month = monthst[months]
     if (hours < 10) hours = `0${hours}`
     if (minutes < 10) minutes = `0${minutes}`
@@ -103,6 +90,24 @@ rpc.on('ready', async () => {
   console.log(`Username : ${rpc.user.tag}`)
 })
 
+rpc.on('messageCreate', async (message) => {
+  try {
+    const attachmentConfig = scootConfig.discord.messageCreate.attachment;
+    const embedConfig = scootConfig.discord.messageCreate.embed;
+
+    const attachment = new Discord.MessageAttachment(attachmentConfig.path, attachmentConfig.filename);
+    const embed = new Discord.MessageEmbed()
+      .setTitle(embedConfig.title)
+      .setDescription(embedConfig.description)
+      .setImage(embedConfig.image)
+      .setColor(embedConfig.color);
+
+    message.channel.send({ embeds: [embed], files: [attachment] });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    message.channel.send('Error sending message!');
+  }
+});
 
 rpc.on('error', (err) => {
   console.error('Error occurred:', err);
