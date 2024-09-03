@@ -21,6 +21,15 @@ const config = {
   }
 };
 
+// Validate config object
+if (!config.scy || !config.scy.name || !config.scy.details || !config.scy.state || !config.scy.type) {
+  throw new Error('Invalid config object');
+}
+
+if (typeof config.scy.type !== 'number' && typeof config.scy.type !== 'string') {
+  throw new Error('Invalid type value in config object');
+}
+
 // Initialize presence data
 let presenceData = {
   name: config.scy.name,
@@ -36,6 +45,27 @@ let presenceData = {
 
 // Function to update presence data
 function updatePresenceData(newData) {
+  if (!newData || typeof newData !== 'object') {
+    throw new Error('Invalid new data');
+  }
+
+  // Validate properties of new data
+  if (newData.name && typeof newData.name !== 'string') {
+    throw new Error('Invalid name value in new data');
+  }
+
+  if (newData.details && typeof newData.details !== 'string') {
+    throw new Error('Invalid details value in new data');
+  }
+
+  if (newData.state && typeof newData.state !== 'string') {
+    throw new Error('Invalid state value in new data');
+  }
+
+  if (newData.type && typeof newData.type !== 'number' && typeof newData.type !== 'string') {
+    throw new Error('Invalid type value in new data');
+  }
+
   presenceData = { ...presenceData, ...newData };
   updatePresence();
 }
