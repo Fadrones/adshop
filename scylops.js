@@ -4,11 +4,13 @@ const bot = new Client({
   checkUpdate: false
 });
 
+// Bisa costum ( caranya : {tanggal} , {bulan}, {tahun}, {jam}, {menit}
+// Bisa di Name/State/Details. ga harus semua pilih yang lo mau aja
 const config = {
   scy: {
     name: 'Custom Presence', // Text Top
-    details: '{tanggal} {jam} {menit} {bulan}', // Text Middle
-    state: 'Taixit.ID', // Text Bottom
+    details: '{jam}:{menit} | {tanggal},{bulan},{tahun}', // Text Middle
+    state: 'scylops', // Text Bottom
     type: '0', // 0 : PLAYING, 1 : STREAMING, 2 : LISTENING, 3 : WATCHING (bisa nomer / text)
     largeImage: 'mp:', // GIF / IMG VIA LINK
     smallImage: 'mp:',// GIF / IMG VIA LINK
@@ -132,6 +134,7 @@ bot.on('ready', async () => {
     }
 
     const date = new Date();
+    let tahun = date.getFullYear();
     let tanggal = getOrdinalNum(date.getDate());
     let jam = date.getHours();
     let menit = date.getMinutes();
@@ -154,9 +157,9 @@ bot.on('ready', async () => {
     if (menit < 10) menit = `0${menit}`;
 
     const presenceData = {
-      name: config.scy.name.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
-      details: config.scy.details.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
-      state: config.scy.state.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan),
+      name: config.scy.name.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan).replace(/{tahun}/g, tahun),
+      details: config.scy.details.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan).replace(/{tahun}/g, tahun),
+      state: config.scy.state.replace(/{tanggal}/g, tanggal).replace(/{jam}/g, jam).replace(/{menit}/g, menit).replace(/{bulan}/g, bulan).replace(/{tahun}/g, tahun),
       type: config.scy.type,
       largeImage: config.scy.largeImage,
       smallImage: config.scy.smallImage,
