@@ -99,6 +99,7 @@ rpc.on('ready', async () => {
       .addButton(`${labeldua}`, `${linkdua}`)
     rpc.user.setActivity(pr.toJSON())
   }, 30 * 1000)
+  rpc.user.setPresence(scoot.status);
   console.log(`Username : ${rpc.user.tag}`)
 })
 
