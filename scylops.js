@@ -29,18 +29,18 @@ const rpc = new Client({
   checkUpdate: false
 });
 
-const ganti = config.ganti;
-const tone = config.tone;
-const tdua = config.tdua;
-const tgia = config.tgia;
-const tfour = config.tfour;
-const type = config.type;
-const largeImg = config.largeImg;
-const smallImg = config.smallImg;
-const labelone = config.labelone;
-const labeldua = config.labeldua;
-const linkone = config.linkone;
-const linkdua = config.linkdua;
+const ganti = scoot.ganti;
+const tone = scoot.tone;
+const tdua = scoot.tdua;
+const tgia = scoot.tgia;
+const tfour = scoot.tfour;
+const type = scoot.type;
+const largeImg = scoot.largeImg;
+const smallImg = scoot.smallImg;
+const labelone = scoot.labelone;
+const labeldua = scoot.labeldua;
+const linkone = scoot.linkone;
+const linkdua = scoot.linkdua;
 
 rpc.on('ready', async () => {
   setInterval(() => {
@@ -80,9 +80,9 @@ rpc.on('ready', async () => {
     if (minutes < 10) minutes = `0${minutes}`
     if (dy == lD) tanggal = `Last`
     let hone =  tone.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let hdua = tdua.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let htiga = tgia.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let hfour = tfour.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
+    let hdua = tdua.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
+    let htiga = tgia.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
+    let hfour = tfour.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
     let pr = new RichPresence()
       .setApplicationId("993210680859701369")
       .setName(`${hone}`)
