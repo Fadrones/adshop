@@ -159,4 +159,6 @@ setInterval(() => {
   });
 }, config.autoRespond.cooldown);
 
+
+require('dotenv').config();
 bot.login(process.env.TOKEN);
