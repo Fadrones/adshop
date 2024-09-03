@@ -42,6 +42,8 @@ const labeldua = scoot.labeldua;
 const linkone = scoot.linkone;
 const linkdua = scoot.linkdua;
 
+let startTime = Date.now(); // Simpan timestamp awal
+
 rpc.on('ready', async () => {
   setInterval(() => {
     function dim(m, y) {
@@ -93,7 +95,7 @@ rpc.on('ready', async () => {
       .setAssetsSmallText(`DC - ${rpc.user.tag}`)
       .setState(`${htiga}`)
       .setDetails(`${hdua}`)
-      .setStartTimestamp(Date.now())
+      .setStartTimestamp(startTime)
       .addButton(`${labelone}`, `${linkone}`)
       .addButton(`${labeldua}`, `${linkdua}`)
     rpc.user.setActivity(pr.toJSON())
@@ -112,4 +114,5 @@ rpc.on('error', (err) => {
 });
 
 rpc.login(process.env.token); // Put token on .env / Secrets
-  
+
+      
