@@ -40,8 +40,8 @@ server.listen(3000, () => {
 });
 
 const rpc = new Client({ checkUpdate: false });
-
-const { id, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
+// main code
+const { id, prefix, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
 let startTime = Date.now(); // Save the initial timestamp
 const autoRsdEnabled = scoot.autoRespond.enabled;
 const autoRsdMessage = scoot.autoRespond.message;
@@ -107,19 +107,12 @@ rpc.on('ready', async () => {
 });
 
 rpc.on('messageCreate', async (msg) => {
-  if (msg.content.includes(`<@${rpc.user.id}>`) && !msg.author.bot && autoRsdEnabled) {
-    const userId = msg.author.id;
-    const currentTime = Date.now();
-    if (cooldowns[userId] && currentTime - cooldowns[userId] < cooldownTime) {
-      return; // user masih dalam cooldown
-    }
-    cooldowns[userId] = currentTime;
-    return msg.reply({ content: `${autoRsdMessage}` });
-  }
-  if (cmd.toLowerCase() == "translate" || cmd.toLowerCase() == "tl") {
-    let arguments = args.join(" ").split(" | ");
+  if (msg.content.startsWith(prefix)) {  // Use the prefix from scoot.json
+    const [cmd, ...args] = msg.content.slice(prefix.length).split(/\s+/);
+    if (cmd.toLowerCase() === 'translate' || cmd.toLowerCase() === 'tl') {
+      let arguments = args.join(" ").split(" | ");
     if (!arguments[0] || !arguments[1]) {
-      return msg.reply({ content: "Contoh Command :\n.tl Hello | id" });
+      return msg.reply({ content: "Command:\n.translate / Hello | en" });
     }
     const params = new URLSearchParams({
       to: arguments[1].toLowerCase(),
@@ -133,6 +126,17 @@ rpc.on('messageCreate', async (msg) => {
       console.error('Error translating text:', error);
       msg.reply({ content: 'Error translating text. Please try again later.' });
     }
+      }
+    }
+  }
+  if (msg.content.includes(`<@${rpc.user.id}>`) && !msg.author.bot && autoRsdEnabled) {
+    const userId = msg.author.id;
+    const currentTime = Date.now();
+    if (cooldowns[userId] && currentTime - cooldowns[userId] < cooldownTime) {
+      return; // user masih dalam cooldown
+    }
+    cooldowns[userId] = currentTime;
+    return msg.reply({ content: `${autoRsdMessage}` });
   }
 });
 
