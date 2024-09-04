@@ -13,9 +13,15 @@
     },
   "button": {
     "enabled": true,
-    "labelone": "...",
-    "linkone": "...",
-    "labeldua": "...",
-    "linkdua": "..."
-  }
+    "labelone": "Button 1",
+    "linkone": "https://example.com/button1",
+    "labeldua": "Button 2",
+    "linkdua": "https://example.com/button2",
+    "enabledTwo": true
+  },
+ "autoRespond": {
+    "enabled": true,
+    "message": "Hello! I am a bot. How can I assist you today?",
+    "cooldownTime": 120
+    }
 }
