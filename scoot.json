@@ -17,7 +17,7 @@
     "linkone": "https://example.com/button1",
     "labeldua": "Button 2",
     "linkdua": "https://example.com/button2",
-    "enabledTwo": true ## False = button 2 lost
+    "enabledTwo": true
   },
  "autoRespond": {
     "enabled": true,
