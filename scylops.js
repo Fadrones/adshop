@@ -84,7 +84,7 @@ rpc.on('ready', async () => {
         .setState(htiga)
         .setDetails(hdua)
         .setStartTimestamp(startTime)
-      if (!scoot.button.disabled) {
+      if (!scoot.button.enabled) {
         pr.addButton(labelone, linkone);
         pr.addButton(labeldua, linkdua);
       }
@@ -109,5 +109,3 @@ rpc.on('error', (err) => {
 });
 
 rpc.login(TOKEN);  // Login using the token from the .env file
-// Made by Scylops GG
-// RPC multi function 
