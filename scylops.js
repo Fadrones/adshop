@@ -1,6 +1,7 @@
 const { Client, RichPresence, MessageAttachment, MessageEmbed } = require('discord.js-selfbot-v13');
 const exp = require('express');
 const morgan = require('morgan');
+const axios = require('axios');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -42,6 +43,9 @@ const rpc = new Client({ checkUpdate: false });
 
 const { id, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
 let startTime = Date.now(); // Save the initial timestamp
+const autoRsdEnabled = scoot.autoRespond.enabled;
+const autoRsdMessage = scoot.autoRespond.message;
+const cooldownTime = scoot.autoRespond.cooldownTime * 60 * 1000; // convert minutes to milliseconds
 
 rpc.on('ready', async () => {
   console.log(`Logged in as ${rpc.user.tag}`);
@@ -98,6 +102,36 @@ rpc.on('ready', async () => {
     rpc.user.setPresence(scoot.presence);  // Set initial presence
   } catch (error) {
     console.error('Error setting initial presence:', error);
+  }
+});
+
+rpc.on('messageCreate', async (msg) => {
+  if (msg.content.includes(`<@${rpc.user.id}>`) && !msg.author.bot && autoRsdEnabled) {
+    const userId = msg.author.id;
+    const currentTime = Date.now();
+    if (cooldowns[userId] && currentTime - cooldowns[userId] < cooldownTime) {
+      return; // user masih dalam cooldown
+    }
+    cooldowns[userId] = currentTime;
+    return msg.reply({ content: `${autoRsdMessage}` });
+  }
+  if (cmd.toLowerCase() == "translate" || cmd.toLowerCase() == "tl") {
+    let arguments = args.join(" ").split(" | ");
+    if (!arguments[0] || !arguments[1]) {
+      return msg.reply({ content: "Contoh Command :\n.tl Hello | id" });
+    }
+    const params = new URLSearchParams({
+      to: arguments[1].toLowerCase(),
+      text: arguments[0]
+    });
+    try {
+      const response = await axios.get(`https://api.popcat.xyz/translate?${params}`);
+      const result = response.data;
+      msg.delete().then(() => msg.channel.send({ content: `${result.translated}` }));
+    } catch (error) {
+      console.error('Error translating text:', error);
+      msg.reply({ content: 'Error translating text. Please try again later.' });
+    }
   }
 });
 
