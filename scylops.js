@@ -41,8 +41,8 @@ server.listen(3000, () => {
 const rpc = new Client({ checkUpdate: false });
 
 const { ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
-
 let startTime = Date.now(); // Save the initial timestamp
+
 rpc.on('ready', async () => {
   console.log(`Logged in as ${rpc.user.tag}`);
   setInterval(() => {
@@ -84,10 +84,9 @@ rpc.on('ready', async () => {
         .setState(htiga)
         .setDetails(hdua)
         .setStartTimestamp(startTime)
-      pr.addButton(button.labelone, button.linkone);
-      pr.addButton(button.labeldua, button.linkdua);
-      if (button.disabled) {
-      pr.buttons = []; // Clear the buttons array
+      if (!scoot.button.disabled) {
+        pr.addButton(labelone, linkone);
+        pr.addButton(labeldua, linkdua);
       }
       rpc.user.setActivity(pr.toJSON());  // Set the presence activity
       console.log('Rich Presence updated successfully');
