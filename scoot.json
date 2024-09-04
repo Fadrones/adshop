@@ -1,4 +1,6 @@
 {
+  "id": "id dev portal",
+  "ganti": ["Rowrrr", "Not the real world "],
   "tone": "{ganti}",
   "tdua": "{jam}:{menit} | {tanggal} , {bulan}", 
   "tgia": "Scylops OnTop",
@@ -10,7 +12,6 @@
   "labeldua": "Button 2",
   "linkone": "https://youtube.com/channel/UCFmKhZEfWcLWwq0K0cYll2Q",
   "linkdua": "https://discord.gg/64kEQMhu4a",
-  "ganti": ["Rowrrr", "Not the real world "],
   "presence": {
     "status": "dnd"
     } 
