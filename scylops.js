@@ -90,10 +90,11 @@ rpc.on('ready', async () => {
         .setStartTimestamp(startTime)
       if (!scoot.button.enabled) {
         pr.addButton(labelone, linkone);
+      }
+      if (scoot.button.enabledTwo) {
         pr.addButton(labeldua, linkdua);
       }
       rpc.user.setActivity(pr.toJSON());  // Set the presence activity
-      console.log('Rich Presence updated successfully');
     } catch (error) {
       console.error('Error setting rich presence:', error);
     }
