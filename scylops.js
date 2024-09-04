@@ -88,7 +88,7 @@ rpc.on('ready', async () => {
         .setState(htiga)
         .setDetails(hdua)
         .setStartTimestamp(startTime)
-      if (!scoot.button.enabled) {
+      if (scoot.button.enabled) {
         pr.addButton(labelone, linkone);
       }
       if (scoot.button.enabledTwo) {
