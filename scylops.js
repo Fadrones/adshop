@@ -46,6 +46,7 @@ let startTime = Date.now(); // Save the initial timestamp
 const autoRsdEnabled = scoot.autoRespond.enabled;
 const autoRsdMessage = scoot.autoRespond.message;
 const cooldownTime = scoot.autoRespond.cooldownTime * 60 * 1000; // convert minutes to milliseconds
+const cooldowns = {};
 
 rpc.on('ready', async () => {
   console.log(`Logged in as ${rpc.user.tag}`);
@@ -70,7 +71,7 @@ rpc.on('ready', async () => {
     if (hours < 10) hours = `0${hours}`;
     if (minutes < 10) minutes = `0${minutes}`;
     if (day === lD) day = `Last`;
-    // Replace placeholders in the templates
+    // Replace placeholders in const cooldowns = {};the templates
     let hone = tone.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
     let hdua = tdua.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
     let htiga = tgia.replace(/{tanggal}/g, day).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
@@ -107,25 +108,25 @@ rpc.on('ready', async () => {
 });
 
 rpc.on('messageCreate', async (msg) => {
-  if (msg.content.startsWith(prefix)) {  // Use the prefix from scoot.json
+  if (!msg) return;
+  if (msg.content.startsWith(prefix)) {
     const [cmd, ...args] = msg.content.slice(prefix.length).split(/\s+/);
     if (cmd.toLowerCase() === 'translate' || cmd.toLowerCase() === 'tl') {
-      let arguments = args.join(" ").split(" | ");
-    if (!arguments[0] || !arguments[1]) {
-      return msg.reply({ content: "Command:\n.translate / Hello | en" });
-    }
-    const params = new URLSearchParams({
-      to: arguments[1].toLowerCase(),
-      text: arguments[0]
-    });
-    try {
-      const response = await axios.get(`https://api.popcat.xyz/translate?${params}`);
-      const result = response.data;
-      msg.delete().then(() => msg.channel.send({ content: `${result.translated}` }));
-    } catch (error) {
-      console.error('Error translating text:', error);
-      msg.reply({ content: 'Error translating text. Please try again later.' });
-    }
+      const arguments = args.join(" ").split(" | ");
+      if (!arguments[0] || !arguments[1]) {
+        return msg.reply({ content: "Command:\n.translate / tl kamu | en" });
+      }
+      const params = new URLSearchParams({
+        to: arguments[1].toLowerCase(),
+        text: arguments[0]
+      });
+      try {
+        const response = await axios.get(`https://api.popcat.xyz/translate?${params}`);
+        const result = response.data;
+        msg.delete().then(() => msg.channel.send({ content: `${result.translated}` }));
+      } catch (error) {
+        console.error('Error translating text:', error);
+        msg.reply({ content: 'Error translating text. Please try again later.' });
       }
     }
   }
@@ -136,7 +137,11 @@ rpc.on('messageCreate', async (msg) => {
       return; // user masih dalam cooldown
     }
     cooldowns[userId] = currentTime;
-    return msg.reply({ content: `${autoRsdMessage}` });
+    try {
+      await msg.reply({ content: `${autoRsdMessage}` });
+    } catch (error) {
+      console.error('Error sending auto-response:', error);
+    }
   }
 });
 
