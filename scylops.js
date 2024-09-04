@@ -40,7 +40,7 @@ server.listen(3000, () => {
 
 const rpc = new Client({ checkUpdate: false });
 
-const { ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
+const { id, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
 let startTime = Date.now(); // Save the initial timestamp
 
 rpc.on('ready', async () => {
@@ -74,7 +74,7 @@ rpc.on('ready', async () => {
     // Create the rich presence
     try {
       let pr = new RichPresence()
-        .setApplicationId("993210680859701369")
+        .setApplicationId(id)
         .setName(hone)
         .setType(type.toUpperCase())  // Ensure type is correct
         .setAssetsLargeImage(largeImg)
