@@ -1,5 +1,6 @@
 {
   "id": "1280971241750007828",
+  "prefix": "?",
   "ganti": ["Rowrrr", "Not the real world "],
   "tone": "{ganti}",
   "tdua": "{jam}:{menit} | {tanggal} , {bulan}", 
