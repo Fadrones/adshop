@@ -1,7 +1,6 @@
-const { Client, RichPresence, MessageAttachment, MessageEmbed } = require('discord.js-selfbot-v13');
+const { Client, MessageAttachment, RichPresence, MessageEmbed } = require('discord.js-selfbot-v13');
 const exp = require('express');
 const morgan = require('morgan');
-const axios = require('axios');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -41,16 +40,12 @@ server.listen(3000, () => {
 
 const rpc = new Client({ checkUpdate: false });
 // main code
-const { id, prefix, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
-let startTime = Date.now(); // Save the initial timestamp
-const autoRsdEnabled = scoot.autoRespond.enabled;
-const autoRsdMessage = scoot.autoRespond.message;
-const cooldownTime = scoot.autoRespond.cooldownTime * 60 * 1000; // convert minutes to milliseconds
-const cooldowns = {};
+const { id, ganti, tone, tdua, tgia, tfour, type, largeImg, smallImg, labelone, labeldua, linkone, linkdua } = scoot;
 
 rpc.on('ready', async () => {
   console.log(`Logged in as ${rpc.user.tag}`);
   setInterval(() => {
+    let startTime = Date.now(); // Save the initial timestamp
     function dim(m, y) {
       return new Date(y, m, 0).getDate();  // Get the number of days in a month
     }
@@ -81,7 +76,7 @@ rpc.on('ready', async () => {
       let pr = new RichPresence()
         .setApplicationId(id)
         .setName(hone)
-        .setType(type.toUpperCase())  // Ensure type is correct
+        .setType(type.toUpperCase()) 
         .setAssetsLargeImage(largeImg)
         .setAssetsSmallImage(smallImg)
         .setAssetsLargeText(hfour)
@@ -89,59 +84,17 @@ rpc.on('ready', async () => {
         .setState(htiga)
         .setDetails(hdua)
         .setStartTimestamp(startTime)
-      if (scoot.button.enabled) {
-        pr.addButton(labelone, linkone);
-      }
-      if (scoot.button.enabledTwo) {
-        pr.addButton(labeldua, linkdua);
-      }
-      rpc.user.setActivity(pr.toJSON());  // Set the presence activity
+        .addButton(`${labelone}`, `${linkone}`)
+        .addButton(`${labeldua}`, `${linkdua}`)
+      rpc.user.setActivity(pr.toJSON()); 
     } catch (error) {
       console.error('Error setting rich presence:', error);
     }
-  }, 60 * 1000);  // Update every 1 minute
+  }, 30 * 1000);  // Update every 30
   try {
-    rpc.user.setPresence(scoot.presence);  // Set initial presence
+    rpc.user.setPresence(scoot.presence); 
   } catch (error) {
     console.error('Error setting initial presence:', error);
-  }
-});
-
-rpc.on('messageCreate', async (msg) => {
-  if (!msg) return;
-  if (msg.content.startsWith(prefix)) {
-    const [cmd, ...args] = msg.content.slice(prefix.length).split(/\s+/);
-    if (cmd.toLowerCase() === 'translate' || cmd.toLowerCase() === 'tl') {
-      const arguments = args.join(" ").split(" | ");
-      if (!arguments[0] || !arguments[1]) {
-        return msg.reply({ content: "Command:\n.translate / tl kamu | en" });
-      }
-      const params = new URLSearchParams({
-        to: arguments[1].toLowerCase(),
-        text: arguments[0]
-      });
-      try {
-        const response = await axios.get(`https://api.popcat.xyz/translate?${params}`);
-        const result = response.data;
-        msg.delete().then(() => msg.channel.send({ content: `${result.translated}` }));
-      } catch (error) {
-        console.error('Error translating text:', error);
-        msg.reply({ content: 'Error translating text. Please try again later.' });
-      }
-    }
-  }
-  if (msg.content.includes(`<@${rpc.user.id}>`) && !msg.author.bot && autoRsdEnabled) {
-    const userId = msg.author.id;
-    const currentTime = Date.now();
-    if (cooldowns[userId] && currentTime - cooldowns[userId] < cooldownTime) {
-      return; // user masih dalam cooldown
-    }
-    cooldowns[userId] = currentTime;
-    try {
-      await msg.reply({ content: `${autoRsdMessage}` });
-    } catch (error) {
-      console.error('Error sending auto-response:', error);
-    }
   }
 });
 
@@ -152,4 +105,4 @@ rpc.on('error', (err) => {
   }, 5000);  // Wait for 5 seconds before restarting
 });
 
-rpc.login(TOKEN);  // Login using the token from the .env file
+rpc.login(TOKEN);  
